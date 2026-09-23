@@ -287,9 +287,8 @@ main{padding-inline:16px;padding-block:24px 64px}
 </main>
 <button class="top-link" id="top" aria-label="Nahoru">↑</button>
 
-<script type="text/markdown" id="md-skoleni">__SKOLENI__</script>
-<script type="text/markdown" id="md-research">__RESEARCH__</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<template id="doc-skoleni">__SKOLENI__</template>
+<template id="doc-research">__RESEARCH__</template>
 <script>
 (function(){
   var META = {
@@ -310,8 +309,7 @@ main{padding-inline:16px;padding-block:24px 64px}
 
   function render(name){
     if(!cache[name]){
-      var src = document.getElementById('md-' + name).textContent;
-      cache[name] = marked.parse(src, {gfm:true});
+      cache[name] = document.getElementById('doc-' + name).innerHTML;
     }
     docEl.innerHTML = cache[name];
     docEl.setAttribute('aria-labelledby', 'tab-' + name);
