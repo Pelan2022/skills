@@ -1,0 +1,416 @@
+<title>Promptování 2026</title>
+<meta name="description" content="Celodenní školení a research report o promptování, stav září 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --ground:#f5f6f2;
+  --paper:#ffffff;
+  --ink:#1b2130;
+  --ink-2:#4a5263;
+  --line:#dcdfd6;
+  --accent:#2342a8;
+  --accent-soft:#e6ebfb;
+  --marker:#ffe45c;
+  --marker-ink:#1b2130;
+  --code-bg:#eef0ea;
+  --warn:#b4432a;
+  --warn-soft:#fbe9e3;
+  --font-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body:"Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#12151c;
+    --paper:#1a1e27;
+    --ink:#e7e9ee;
+    --ink-2:#a6adbb;
+    --line:#2d3340;
+    --accent:#8fa6ff;
+    --accent-soft:#232c4a;
+    --marker:#8a7a1c;
+    --marker-ink:#fff8d0;
+    --code-bg:#20252f;
+    --warn:#ff9a80;
+    --warn-soft:#3a2420;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#12151c;
+  --paper:#1a1e27;
+  --ink:#e7e9ee;
+  --ink-2:#a6adbb;
+  --line:#2d3340;
+  --accent:#8fa6ff;
+  --accent-soft:#232c4a;
+  --marker:#8a7a1c;
+  --marker-ink:#fff8d0;
+  --code-bg:#20252f;
+  --warn:#ff9a80;
+  --warn-soft:#3a2420;
+}
+
+*{box-sizing:border-box}
+html{scroll-padding-top:120px}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:17px;
+  line-height:1.6;
+  -webkit-text-size-adjust:100%;
+}
+
+/* ---------- top bar ---------- */
+.bar{
+  position:sticky;
+  top:env(safe-area-inset-top,0px);
+  z-index:10;
+  background:var(--ground);
+  border-bottom:1px solid var(--line);
+  padding-inline:16px;
+}
+.bar-inner{
+  max-width:860px;
+  margin-inline:auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding-block:10px;
+  flex-wrap:wrap;
+}
+.brand{
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:1.05rem;
+  letter-spacing:-.01em;
+  margin-right:auto;
+  white-space:nowrap;
+}
+.brand span{
+  background:linear-gradient(transparent 55%, var(--marker) 55%);
+  color:var(--ink);
+  padding-inline:2px;
+}
+.tabs{display:flex;gap:4px;background:var(--code-bg);padding:3px;border-radius:999px}
+.tab{
+  appearance:none;border:0;background:transparent;color:var(--ink-2);
+  font:600 .9rem/1 var(--font-body);
+  padding:9px 14px;border-radius:999px;cursor:pointer;
+}
+.tab[aria-selected="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0 / .12)}
+.tab:focus-visible,.toc-btn:focus-visible,.copy:focus-visible,.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.toc-btn{
+  appearance:none;border:1px solid var(--line);background:var(--paper);color:var(--ink);
+  font:600 .9rem/1 var(--font-body);padding:9px 12px;border-radius:999px;cursor:pointer;
+}
+
+/* ---------- toc panel ---------- */
+.toc{
+  max-width:860px;margin-inline:auto;
+  padding-block:4px 12px;
+}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:2px;max-height:55vh;overflow:auto}
+.toc a{
+  display:block;padding:8px 10px;border-radius:8px;color:var(--ink);text-decoration:none;
+  font-size:.95rem;line-height:1.35;
+}
+.toc a:hover{background:var(--accent-soft)}
+
+/* ---------- document ---------- */
+main{padding-inline:16px;padding-block:24px 64px}
+.doc{max-width:760px;margin-inline:auto}
+.doc > *:first-child{margin-top:0}
+
+.doc h1{
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:clamp(1.9rem, 6vw, 2.8rem);
+  line-height:1.08;
+  letter-spacing:-.02em;
+  margin:.2em 0 .5em;
+  text-wrap:balance;
+}
+.doc h2{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:clamp(1.4rem, 4.4vw, 1.8rem);
+  line-height:1.2;
+  letter-spacing:-.01em;
+  margin:2.4em 0 .6em;
+  padding-top:.9em;
+  border-top:2px solid var(--ink);
+  text-wrap:balance;
+}
+.doc h3{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:1.2rem;
+  line-height:1.3;
+  margin:1.8em 0 .5em;
+  text-wrap:balance;
+}
+.doc h4{font-size:1.02rem;margin:1.4em 0 .4em}
+.doc p,.doc li{max-width:65ch}
+.doc p{margin:.7em 0}
+.doc ul,.doc ol{padding-left:1.3em;margin:.6em 0}
+.doc li{margin:.3em 0}
+.doc li::marker{color:var(--ink-2)}
+.doc a{color:var(--accent);text-underline-offset:2px;overflow-wrap:anywhere}
+.doc strong{font-weight:700}
+.doc em{color:var(--ink-2)}
+.doc hr{border:0;border-top:1px dashed var(--line);margin:2em 0}
+
+.doc blockquote{
+  margin:1.2em 0;
+  padding:12px 16px;
+  background:var(--accent-soft);
+  border-radius:10px;
+  color:var(--ink);
+}
+.doc blockquote p{margin:.4em 0}
+
+.doc code{
+  font-family:var(--font-mono);
+  font-size:.84em;
+  background:var(--code-bg);
+  padding:.1em .35em;
+  border-radius:4px;
+  overflow-wrap:anywhere;
+}
+.pre-wrap{position:relative;margin:1em 0}
+.doc pre{
+  margin:0;
+  background:var(--code-bg);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:14px 16px;
+  overflow-x:auto;
+  font-size:.82rem;
+  line-height:1.55;
+}
+.doc pre code{background:none;padding:0;font-size:inherit;overflow-wrap:normal;white-space:pre}
+.pre-wrap.prose-block pre code{white-space:pre-wrap}
+.copy{
+  position:absolute;top:8px;right:8px;
+  appearance:none;border:1px solid var(--line);background:var(--paper);color:var(--ink);
+  font:600 .75rem/1 var(--font-body);padding:7px 10px;border-radius:999px;cursor:pointer;
+}
+
+.table-wrap{
+  overflow-x:auto;
+  margin:1.1em 0;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--paper);
+  -webkit-overflow-scrolling:touch;
+}
+.doc table{border-collapse:collapse;width:100%;font-size:.9rem;line-height:1.45}
+.doc th,.doc td{padding:9px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.doc th{
+  font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);
+  font-weight:700;background:var(--code-bg);white-space:nowrap;
+}
+.doc tr:last-child td{border-bottom:0}
+.doc td{min-width:9ch}
+.doc td:first-child{font-variant-numeric:tabular-nums}
+.table-wrap.wide table{min-width:640px}
+
+/* checklist items */
+.doc li.task{list-style:none;margin-left:-1.3em}
+.doc li.task input{margin-right:.5em;accent-color:var(--accent);transform:translateY(1px)}
+
+/* hidden-injection demo */
+.injection{
+  display:inline-block;
+  margin-top:4px;
+  padding:4px 8px;
+  border:1.5px dashed var(--warn);
+  background:var(--warn-soft);
+  color:var(--warn);
+  border-radius:6px;
+  font-size:.9em;
+}
+.injection::before{
+  content:"Skrytý text v dokumentu: ";
+  font-weight:700;
+}
+
+.meta{
+  max-width:760px;margin:0 auto 20px;
+  font-size:.85rem;color:var(--ink-2);
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+}
+.chip{border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--paper)}
+
+.foot{max-width:760px;margin:48px auto 0;color:var(--ink-2);font-size:.85rem;border-top:1px solid var(--line);padding-top:16px}
+.top-link{
+  position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  appearance:none;border:1px solid var(--line);background:var(--paper);color:var(--ink);
+  width:44px;height:44px;border-radius:50%;font-size:1.1rem;cursor:pointer;
+  box-shadow:0 2px 8px rgb(0 0 0 / .15);
+}
+
+@media (max-width:520px){
+  body{font-size:16px}
+  .brand{font-size:.98rem;flex-basis:100%}
+  .bar-inner{gap:8px}
+  .toc-btn{margin-left:auto}
+  .tab{padding:8px 11px}
+  .doc h2{margin-top:2em}
+}
+@media (prefers-reduced-motion:no-preference){
+  html{scroll-behavior:smooth}
+}
+</style>
+
+<header class="bar">
+  <div class="bar-inner">
+    <div class="brand"><span>Promptování</span> 2026</div>
+    <div class="tabs" role="tablist" aria-label="Dokument">
+      <button class="tab" role="tab" id="tab-skoleni" aria-controls="doc" aria-selected="true" data-doc="skoleni">Školení 8 h</button>
+      <button class="tab" role="tab" id="tab-research" aria-controls="doc" aria-selected="false" data-doc="research">Research</button>
+    </div>
+    <button class="toc-btn" id="toc-btn" aria-expanded="false" aria-controls="toc">Obsah</button>
+  </div>
+  <nav class="toc" id="toc" hidden aria-label="Obsah dokumentu"><ol id="toc-list"></ol></nav>
+</header>
+
+<main>
+  <div class="meta" id="meta"></div>
+  <article class="doc" id="doc" role="tabpanel"></article>
+  <div class="foot">Podklady: research report o promptování (stav 23. 9. 2026) a z něj odvozené celodenní školení. Šablony v šedých blocích lze zkopírovat tlačítkem Kopírovat.</div>
+</main>
+<button class="top-link" id="top" aria-label="Nahoru">↑</button>
+
+<script type="text/markdown" id="md-skoleni">__SKOLENI__</script>
+<script type="text/markdown" id="md-research">__RESEARCH__</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script>
+(function(){
+  var META = {
+    skoleni: ['Celý den · 9:00–17:00', 'Začátečníci + pokročilí', '7 bloků · 8 příloh'],
+    research: ['Stav k 23. 9. 2026', 'Primární zdroje: Anthropic, OpenAI, Google', '9 kapitol']
+  };
+  var docEl = document.getElementById('doc');
+  var tocList = document.getElementById('toc-list');
+  var tocEl = document.getElementById('toc');
+  var tocBtn = document.getElementById('toc-btn');
+  var metaEl = document.getElementById('meta');
+  var cache = {};
+
+  function slug(s){
+    return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+      .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60);
+  }
+
+  function render(name){
+    if(!cache[name]){
+      var src = document.getElementById('md-' + name).textContent;
+      cache[name] = marked.parse(src, {gfm:true});
+    }
+    docEl.innerHTML = cache[name];
+    docEl.setAttribute('aria-labelledby', 'tab-' + name);
+
+    // tables: wrap for horizontal scroll
+    docEl.querySelectorAll('table').forEach(function(t){
+      var w = document.createElement('div');
+      w.className = 'table-wrap' + (t.rows[0] && t.rows[0].cells.length > 3 ? ' wide' : '');
+      t.parentNode.insertBefore(w, t); w.appendChild(t);
+    });
+
+    // hide empty header rows
+    docEl.querySelectorAll('thead').forEach(function(th){ if(!th.textContent.trim()) th.hidden = true; });
+
+    // code blocks: copy buttons; prose templates wrap
+    docEl.querySelectorAll('pre').forEach(function(pre){
+      var w = document.createElement('div');
+      w.className = 'pre-wrap';
+      var text = pre.textContent;
+      var isDiagram = /[┌│└]/.test(text) || /^\s*\d\s{2}[A-ZÁ-Ž]/m.test(text);
+      if(!isDiagram) w.classList.add('prose-block');
+      pre.parentNode.insertBefore(w, pre); w.appendChild(pre);
+      if(isDiagram) return;
+      var b = document.createElement('button');
+      b.className = 'copy'; b.type = 'button'; b.textContent = 'Kopírovat';
+      b.addEventListener('click', function(){
+        var done = function(){ b.textContent = 'Zkopírováno'; setTimeout(function(){ b.textContent = 'Kopírovat'; }, 1600); };
+        try{
+          navigator.clipboard.writeText(text).then(done, function(){ selectText(pre); b.textContent = 'Označeno'; });
+        }catch(e){ selectText(pre); b.textContent = 'Označeno'; }
+      });
+      w.appendChild(b);
+    });
+
+    // task list checkboxes
+    docEl.querySelectorAll('li').forEach(function(li){
+      if(li.querySelector(':scope > input[type=checkbox]')){
+        li.classList.add('task');
+        var cb = li.querySelector('input'); cb.disabled = false;
+      }
+    });
+
+    // internal link between docs
+    docEl.querySelectorAll('a[href]').forEach(function(a){
+      var h = a.getAttribute('href');
+      if(/promptovani-2026\.md$/.test(h)){ a.href = '#research'; a.addEventListener('click', function(e){ e.preventDefault(); show('research', true); }); }
+      else if(/^https?:/.test(h)){ a.target = '_blank'; a.rel = 'noopener'; }
+    });
+
+    // headings ids + toc
+    tocList.innerHTML = '';
+    var used = {};
+    docEl.querySelectorAll('h2').forEach(function(h){
+      var id = slug(h.textContent) || 'sekce';
+      while(used[id]) id += '-x';
+      used[id] = 1; h.id = id;
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.href = '#' + id; a.textContent = h.textContent;
+      a.addEventListener('click', function(e){
+        e.preventDefault(); toggleToc(false);
+        h.scrollIntoView();
+      });
+      li.appendChild(a); tocList.appendChild(li);
+    });
+
+    metaEl.innerHTML = '';
+    META[name].forEach(function(t){ var s = document.createElement('span'); s.className = 'chip'; s.textContent = t; metaEl.appendChild(s); });
+  }
+
+  function selectText(el){
+    try{ var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }catch(e){}
+  }
+
+  function show(name, scroll){
+    document.querySelectorAll('.tab').forEach(function(t){ t.setAttribute('aria-selected', String(t.dataset.doc === name)); });
+    render(name);
+    toggleToc(false);
+    try{ localStorage.setItem('prompt-doc', name); }catch(e){}
+    if(scroll) window.scrollTo(0,0);
+  }
+
+  function toggleToc(open){
+    if(typeof open !== 'boolean') open = tocEl.hidden;
+    tocEl.hidden = !open;
+    tocBtn.setAttribute('aria-expanded', String(open));
+  }
+
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click', function(){ show(t.dataset.doc, true); });
+  });
+  tocBtn.addEventListener('click', function(){ toggleToc(); });
+  document.getElementById('top').addEventListener('click', function(){ window.scrollTo(0,0); });
+
+  var start = 'skoleni';
+  if(location.hash === '#research') start = 'research';
+  else if(location.hash !== '#skoleni'){
+    try{ var saved = localStorage.getItem('prompt-doc'); if(saved === 'research' || saved === 'skoleni') start = saved; }catch(e){}
+  }
+  show(start, false);
+})();
+</script>
